@@ -2,9 +2,7 @@ package info.toannvs.jobhunter.controller;
 
 import info.toannvs.jobhunter.domain.User;
 import info.toannvs.jobhunter.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -14,8 +12,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/users")
     public User createNewUser(@RequestBody User user) {
         return userService.handleCreateUser(user);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.handleDeleteUser(id);
     }
 }
