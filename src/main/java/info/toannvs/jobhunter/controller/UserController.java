@@ -2,6 +2,8 @@ package info.toannvs.jobhunter.controller;
 
 import info.toannvs.jobhunter.domain.User;
 import info.toannvs.jobhunter.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,27 +17,38 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.handleGetUserById(id);
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = userService.handleGetUserById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.handleGetAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.handleGetAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @PostMapping("/users")
-    public User createNewUser(@RequestBody User user) {
-        return userService.handleCreateUser(user);
+    public ResponseEntity<User> createNewUser(@RequestBody User user) {
+        User newUser = userService.handleCreateUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @PutMapping("/users")
-    public User updateUser(@RequestBody User user) {
-        return userService.handleUpdateUser(user);
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        User updatedUser = userService.handleUpdateUser(user);
+        if (updatedUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userService.handleDeleteUser(id);
+        return ResponseEntity.ok().body("User deleted successfully");
     }
 }
