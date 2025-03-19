@@ -26,6 +26,18 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
+    public User handleUpdateUser(User user) {
+        User existingUser = this.userRepository.findById(user.getId()).orElse(null);
+        if (existingUser == null) {
+            return null;
+        }
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(user.getPassword());
+
+        return this.userRepository.save(existingUser);
+    }
+
     public void handleDeleteUser(Long id) {
         this.userRepository.deleteById(id);
     }
