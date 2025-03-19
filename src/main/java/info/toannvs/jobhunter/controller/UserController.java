@@ -4,6 +4,8 @@ import info.toannvs.jobhunter.domain.User;
 import info.toannvs.jobhunter.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class UserController {
     private final UserService userService;
@@ -12,9 +14,24 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/users/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userService.handleGetUserById(id);
+    }
+
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userService.handleGetAllUsers();
+    }
+
     @PostMapping("/users")
     public User createNewUser(@RequestBody User user) {
         return userService.handleCreateUser(user);
+    }
+
+    @PutMapping("/users")
+    public User updateUser(@RequestBody User user) {
+        return userService.handleUpdateUser(user);
     }
 
     @DeleteMapping("/users/{id}")
