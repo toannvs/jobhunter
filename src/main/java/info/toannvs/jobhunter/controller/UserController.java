@@ -1,6 +1,7 @@
 package info.toannvs.jobhunter.controller;
 
 import info.toannvs.jobhunter.domain.User;
+import info.toannvs.jobhunter.exception.IdInvalidException;
 import info.toannvs.jobhunter.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,11 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @ExceptionHandler(value = IdInvalidException.class)
+    public ResponseEntity<String> handleIdInvalidException(IdInvalidException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @GetMapping("/users/{id}")
@@ -47,7 +53,10 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) throws IdInvalidException {
+        if (id <= 0) {
+            throw new IdInvalidException("Invalid id");
+        }
         userService.handleDeleteUser(id);
         return ResponseEntity.ok().body("User deleted successfully");
     }
