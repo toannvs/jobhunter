@@ -17,11 +17,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ExceptionHandler(value = IdInvalidException.class)
-    public ResponseEntity<String> handleIdInvalidException(IdInvalidException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
-
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.handleGetUserById(id);
