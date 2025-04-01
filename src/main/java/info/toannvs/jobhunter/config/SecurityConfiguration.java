@@ -28,8 +28,8 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
                     .requestMatchers("/").permitAll()
-                    .anyRequest().authenticated()
-            )
+                    .anyRequest().permitAll())
+                .formLogin(f -> f.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
